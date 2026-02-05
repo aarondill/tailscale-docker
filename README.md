@@ -28,3 +28,8 @@ If you're using Pi Hole, you can use the [DNS settings](https://login.tailscale.
    3. Optionally `Use with exit node`
    4. Save
 3. Enable `Override DNS servers` to make sure clients use the new DNS settings
+
+## Back up / state
+
+The state of the Tailscale node is stored in `./state`. If this directory is deleted, the node will be recreated.
+You may want to delete the node in the UI _before_ starting the container again to avoid receiving a different name.
