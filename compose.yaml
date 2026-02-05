@@ -1,0 +1,24 @@
+# Thanks to u/cmsj on reddit for the base that this file came from
+# See: https://www.reddit.com/r/Tailscale/comments/16a1w2k/comment/jz619dw/
+services:
+  tailscale:
+    uts: host # set the hostname to the same as host!
+    image: tailscale/tailscale:latest
+    restart: unless-stopped
+    network_mode: "host"
+    privileged: true
+    volumes:
+      - ./state:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      TS_ACCEPT_DNS: true
+      TS_STATE_DIR: "/var/lib/tailscale" # This gives us a persistent entry in TS Machines, rather than Epehmeral
+      TS_USERSPACE: false # Bizarrely, even if you bind /dev/net/tun in, you still need to tell the image to not use userspace networking
+      TS_AUTH_ONCE: false # If you have a config error somewhere, and this is set to true, it'll be really hard to figure it out
+      TS_ROUTES: 10.0.0.0/25 # This is the subnet that will be used for exit node
+      TS_EXTRA_ARGS: "--reset --advertise-exit-node"
+      TS_TAILSCALED_EXTRA_ARGS: "--tun=tailscale0" # This is inexplicably required to make exit-node work
