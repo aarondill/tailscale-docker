@@ -23,3 +23,10 @@ services:
       TS_ROUTES: 10.0.0.0/25 # This is the subnet that will be used for exit node
       TS_EXTRA_ARGS: "--reset --advertise-exit-node"
       TS_TAILSCALED_EXTRA_ARGS: "--tun=tailscale0" # This is inexplicably required to make exit-node work
+      # TS_ENABLE_HEALTH_CHECK: true
+    healthcheck:
+      # test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:9002/healthz"]
+      # The built-in healthcheck doesn't seem to respond to internet loss.
+      test: tailscale status --peers=false --json | grep -q 'Online.*true'
+      interval: 30s
+      start_period: 5s
