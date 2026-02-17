@@ -12,9 +12,13 @@ services:
       - ./state:/var/lib/tailscale
       - /dev/net/tun:/dev/net/tun
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
+      - ./dnsmasq-hack.sh:/dnsmasq-hack.sh:ro
     cap_add:
       - NET_ADMIN
       - NET_RAW
+    post_start:
+      # Note: this is a hack for pi-hole. If you don't plan on using pi-hole, you can remove this.
+      - command: ./dnsmasq-hack.sh
     environment:
       TS_ACCEPT_DNS: true
       TS_STATE_DIR: "/var/lib/tailscale" # This gives us a persistent entry in TS Machines, rather than Epehmeral
