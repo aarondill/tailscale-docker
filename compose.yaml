@@ -12,6 +12,8 @@ services:
       - ./state:/var/lib/tailscale
       - /dev/net/tun:/dev/net/tun
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
+      # Optionally enable to use MagicDNS on the host
+      # - /etc/resolv.conf:/etc/resolv.conf
     cap_add:
       - NET_ADMIN
       - NET_RAW
