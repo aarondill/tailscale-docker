@@ -5,7 +5,3 @@ updates:
       - "/."
     schedule:
       interval: "daily"
-  - package-ecosystem: "docker"
-    directories:
-    schedule:
-      interval: "daily"
