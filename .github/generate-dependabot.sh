@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Source: https://medium.com/@svenvanginkel/automating-dependabot-for-docker-compose-13acdff61133
+# Original Source: https://medium.com/@svenvanginkel/automating-dependabot-for-docker-compose-13acdff61133
 set -euC
 
 tmpfile=$(mktemp)
@@ -11,7 +11,7 @@ updates:
 YAML
 
 # Find and sort all docker-compose.yml directories
-readarray composes -t -d '' < <(find . -regex '.*/\(docker-\)?compose\(-[\w]+\)?\(?>\.[\w-]+\)?\.ya?ml' -print0)
+readarray -t -d '' composes < <(find . -regex '.*/\(docker-\)?compose\(-[\w]+\)?\(?>\.[\w-]+\)?\.ya?ml' -print0)
 if [ "${#composes[@]}" -gt 0 ]; then
   # Header
   cat <<'YAML'
@@ -30,7 +30,7 @@ YAML
 fi >>"$tmpfile"
 
 # Find and sort all Dockerfile directories
-readarray dockerfiles -t -d '' < <(find . -iname 'Dockerfile' -print0)
+readarray -t -d '' dockerfiles < <(find . -iname 'Dockerfile' -print0)
 if [ "${#dockerfiles[@]}" -gt 0 ]; then
   # Header
   cat <<'YAML'
@@ -46,7 +46,7 @@ YAML
     schedule:
       interval: "daily"
 YAML
-fi
+fi >>"$tmpfile"
 
 if [ "${#composes[@]}" -eq 0 ] && [ "${#dockerfiles[@]}" -eq 0 ]; then
   echo "ℹ️ No docker-compose.yml or Dockerfile files found."
