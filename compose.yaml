@@ -3,7 +3,7 @@
 services:
   tailscale:
     uts: host # set the hostname to the same as host!
-    image: tailscale/tailscale:latest
+    image: tailscale/tailscale:v1.94.2
     container_name: tailscale # nicer name, also ensures this container is not duplicated.
     restart: unless-stopped
     network_mode: "host"
